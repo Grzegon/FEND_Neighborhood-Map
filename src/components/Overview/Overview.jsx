@@ -316,7 +316,7 @@ class Overview extends PureComponent {
                     })
                     .then(data => {
                         const photo = data.photos.photo[0];
-                        const image = '<img class="infowndw-img" src="https://farm' + photo.farm + '.staticflickr.com/' + photo.server + '/' + photo.id + '_' + photo.secret + '_n.jpg">';
+                        const image = '<img alt="' + place.name + '" src="https://farm' + photo.farm + '.staticflickr.com/' + photo.server + '/' + photo.id + '_' + photo.secret + '_n.jpg">';
 
                         self.state.infowindow.setContent(name + address + '</br>' + image);
                     })
