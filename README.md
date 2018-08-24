@@ -22,8 +22,9 @@ This project was written using Javascript and CSS.
 
 1. Download zip file or clone respository from [Github](https://github.com/Grzegon/FEND_Neighborhood-Map) and open the folder.
 2. In a terminal run `npm install` to get all application dependencies. Then run app with `npm start`. It should automatically open application in new tab in Your web browser. 
-3. Take a look on my neigborhood map, maybe You'll find something interesting!
+3. If You want to buil app and run in production environment: `npm run build`, then `serve -s build` and navigate to http://localhost:5000/
+4. Take a look on my neigborhood map, maybe You'll find something interesting!
 
 ## Version
 
-This is version `1.0` of this application.
+This is version `1.1` of this application.
