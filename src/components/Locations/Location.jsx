@@ -12,6 +12,8 @@ class Location extends PureComponent {
     render() {
         return (
             <ListItem
+                role="button"
+                aria-label="Open location info"
                 button={true}
                 onKeyPress={this.props.openInfoWindow.bind(this, this.props.location)}
                 onClick={this.props.openInfoWindow.bind(this, this.props.location)}

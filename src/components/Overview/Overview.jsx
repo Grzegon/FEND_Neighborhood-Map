@@ -92,10 +92,12 @@ function loadScript(src) {
     return new Promise((resolve, reject) => {
         let script = document.createElement('script');
         script.src = src;
+        script.async = true;
+        script.defer = true;
         script.addEventListener('load', function () {
             resolve();
         });
-        script.addEventListener('error', function (e) {
+        script.addEventListener('onerror', function (e) {
             reject(e);
         });
         document.body.appendChild(script);
@@ -119,7 +121,7 @@ class Overview extends PureComponent {
                     'placeID': "ChIJi7BXA9_pD0cRQzVsROEKOmk"
                 },
                 {
-                    'name': "Hala Targowa",
+                    'name': "Hala Targowa Wrocław",
                     'type': "Shopping Mall",
                     'latitude': 51.112559,
                     'longitude': 17.03981,
@@ -143,12 +145,12 @@ class Overview extends PureComponent {
                     'placeID': "ChIJCZ_-hHfCD0cRl4Z7EkuomM0"
                 },
                 {
-                    'name': "Ratusz",
+                    'name': "Ratusz we Wrocławiu",
                     'type': "Museum",
                     'latitude': 51.11086109999999,
                     'longitude': 17.0315217,
                     'streetAddress': "Ratusz, 11-400 Wrocław, Polska",
-                    'placeID': "ChIJr4mPpHXCD0cR2l_6MFnVGac"
+                    'placeID': "ChIJKalvsXXCD0cRNChs1yMH7yk"
                 },
                 {
                     'name': "Muzeum Archeologiczne Oddział Muzeum Miejskiego Wrocławia",
@@ -204,8 +206,13 @@ class Overview extends PureComponent {
         this.closeInfoWindow = this.closeInfoWindow.bind(this);
     }
 
+    gm_authFailure() {
+        window.alert("Google Maps error!");
+    }
+
     componentDidMount() {
         window.initMap = this.initMap;
+        window.gm_authFailure = this.gm_authFailure;
         // Load the script into html
         loadScript(script);
     }
@@ -303,7 +310,19 @@ class Overview extends PureComponent {
                 const name = '<b>Name: </b>' + place.name + '<br>';
                 const address = '<b>Address: </b>' + place.formatted_address + '<br>';
 
-                self.state.infowindow.setContent(name + address);
+                fetch('https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=a340df15d24cb01fe59a133e83b4ad28&text=' + place.name + '&privacy_filter=1&format=json&nojsoncallback=1')
+                    .then(response => {
+                        return response.json();
+                    })
+                    .then(data => {
+                        const photo = data.photos.photo[0];
+                        const image = '<img class="infowndw-img" src="https://farm' + photo.farm + '.staticflickr.com/' + photo.server + '/' + photo.id + '_' + photo.secret + '_n.jpg">';
+
+                        self.state.infowindow.setContent(name + address + '</br>' + image);
+                    })
+                    .catch(() => {
+                        self.state.infowindow.setContent(name + address + '</br><b>Could not load image!</b>');
+                    })
             } else {
                 self.state.infowindow.setContent('<b>Could not load data!</b>');
             }
